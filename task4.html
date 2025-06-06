@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All-in-One Web Project</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      scroll-behavior: smooth;
+      background-color: #f9fbfc;
+    }
+
+    nav {
+      background-color: #ffffff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      padding: 1em;
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav a {
+      color: #333;
+      text-decoration: none;
+      padding: 0.5em;
+      font-weight: 600;
+    }
+    nav a:hover {
+      color: #007a7a;
+    }
+
+    section {
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    #portfolio {
+      background-color: #f0f8ff;
+    }
+
+    #todo {
+      background-color: #fefefe;
+    }
+
+    #products {
+      background-color: #f4f8fb;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #007a7a;
+    }
+
+    h3 {
+      color: #005f5f;
+    }
+
+    input, button, select, textarea {
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    button {
+      background-color: #00aa88;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #008066;
+    }
+
+    .product {
+      background-color: #ffffff;
+      margin: 10px 0;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #eeeeee;
+      color: #444;
+    }
+
+    form {
+      max-width: 400px;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+      max-width: 400px;
+    }
+
+    li {
+      background: #f2f2f2;
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    li:hover {
+      background: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#todo">To-Do</a>
+    <a href="#products">Products</a>
+  </nav>
+
+  <!-- Portfolio Section -->
+  <section id="portfolio">
+    <h2>Portfolio</h2>
+
+    <div id="portfolio-about">
+      <h3>About Me</h3>
+      <p>
+        I am currently working on a web development task that involves designing and building user-friendly websites.
+        My role includes coding with HTML, CSS, JavaScript, and integrating responsive design.
+        I also ensure the site functions smoothly across different browsers and devices.
+      </p>
+    </div>
+
+    <div id="portfolio-projects">
+      <h3>Projects</h3>
+      <ul>
+        <li>Weather App using OpenWeatherMap API</li>
+        <li>Responsive Portfolio Website</li>
+      </ul>
+    </div>
+
+    <div id="portfolio-contact">
+      <h3>Contact</h3>
+      <form>
+        <input type="text" placeholder="Your Name" required><br>
+        <input type="email" placeholder="Your Email" required><br>
+        <textarea placeholder="Your Message" required rows="4"></textarea><br>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- To-Do List Section -->
+  <section id="todo">
+    <h2>To-Do List</h2>
+    <input type="text" id="taskInput" placeholder="New Task">
+    <button onclick="addTask()">Add</button>
+    <ul id="taskList"></ul>
+  </section>
+
+  <!-- Product Listing Section -->
+  <section id="products">
+    <h2>Product Listing</h2>
+    <label>
+      Filter:
+      <select id="filterCategory" onchange="renderProducts()">
+        <option value="All">All</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Books">Books</option>
+      </select>
+    </label>
+    <label>
+      Sort:
+      <select id="sortPrice" onchange="renderProducts()">
+        <option value="asc">Price: Low to High</option>
+        <option value="desc">Price: High to Low</option>
+      </select>
+    </label>
+    <div id="productList"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Your Name | All-in-One Web Project
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // To-Do List Logic
+    const taskInput = document.getElementById("taskInput");
+    const taskList = document.getElementById("taskList");
+
+    function loadTasks() {
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      taskList.innerHTML = "";
+      tasks.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.textContent = task;
+        li.onclick = () => {
+          tasks.splice(index, 1);
+          localStorage.setItem("tasks", JSON.stringify(tasks));
+          loadTasks();
+        };
+        taskList.appendChild(li);
+      });
+    }
+
+    function addTask() {
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      if (taskInput.value.trim() === "") return;
+      tasks.push(taskInput.value.trim());
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      taskInput.value = "";
+      loadTasks();
+    }
+
+    loadTasks();
+
+    // Product Listing Logic
+    const products = [
+      { name: "Smartphone", category: "Electronics", price: 300 },
+      { name: "Laptop", category: "Electronics", price: 1200 },
+      { name: "Book A", category: "Books", price: 20 },
+      { name: "Book B", category: "Books", price: 15 }
+    ];
+
+    function renderProducts() {
+      const filter = document.getElementById("filterCategory").value;
+      const sort = document.getElementById("sortPrice").value;
+      let filtered = filter === "All" ? products : products.filter(p => p.category === filter);
+      filtered.sort((a, b) => sort === "asc" ? a.price - b.price : b.price - a.price);
+
+      document.getElementById("productList").innerHTML = filtered.map(p =>
+        `<div class="product"><strong>${p.name}</strong><br>Category: ${p.category}<br>Price: $${p.price}</div>`
+      ).join("");
+    }
+
+    renderProducts();
+  </script>
+
+</body>
+</html>
+
+
+
+
+
